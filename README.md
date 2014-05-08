@@ -1,4 +1,4 @@
-# Methic
+# Methic [![Build Status](https://travis-ci.org/zizkovrb/methic.svg?branch=master)](https://travis-ci.org/zizkovrb/methic)
 
 Simple arithmetic implemented by Treetop.
 

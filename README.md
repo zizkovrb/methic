@@ -1,6 +1,6 @@
 # Methic [![Build Status](https://travis-ci.org/zizkovrb/methic.svg?branch=master)](https://travis-ci.org/zizkovrb/methic)
 
-Simple arithmetic implemented by Treetop.
+Simple arithmetic implemented via [Treetop](https://github.com/cjheath/treetop).
 
 Heavily based on [treetop arithmetic example](https://github.com/cjheath/treetop/blob/master/examples/lambda_calculus/arithmetic.treetop).
 

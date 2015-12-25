@@ -76,7 +76,7 @@ grammar Methic
   end
 
   rule variable
-    [a-z]+ {
+    [A-Za-z]+ [0-9]* [A-Za-z]* {
       def eval(env={})
         env[name]
       end

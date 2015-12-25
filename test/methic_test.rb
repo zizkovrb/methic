@@ -14,7 +14,7 @@ class MethicParserTest < Minitest::Test
   end
 
   def test_variable
-    assert_equal 0, parse('x').eval('x' => 0)
+    assert_equal 0, parse('Xy1xY').eval('Xy1xY' => 0)
     assert_equal 3, parse('x').eval('x' => 3)
     assert_equal 10, parse('y').eval('y' => 10)
   end

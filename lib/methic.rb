@@ -154,7 +154,7 @@ module Methic
       r0.extend(EqualityOp0)
       @index += match_len
     else
-      terminal_parse_failure('==')
+      terminal_parse_failure('\'==\'')
       r0 = nil
     end
 
@@ -281,7 +281,7 @@ module Methic
       r1.extend(AdditiveOp0)
       @index += match_len
     else
-      terminal_parse_failure('+')
+      terminal_parse_failure('\'+\'')
       r1 = nil
     end
     if r1
@@ -293,7 +293,7 @@ module Methic
         r2.extend(AdditiveOp1)
         @index += match_len
       else
-        terminal_parse_failure('-')
+        terminal_parse_failure('\'-\'')
         r2 = nil
       end
       if r2
@@ -428,7 +428,7 @@ module Methic
       r1.extend(MultitiveOp0)
       @index += match_len
     else
-      terminal_parse_failure('*')
+      terminal_parse_failure('\'*\'')
       r1 = nil
     end
     if r1
@@ -440,7 +440,7 @@ module Methic
         r2.extend(MultitiveOp1)
         @index += match_len
       else
-        terminal_parse_failure('/')
+        terminal_parse_failure('\'/\'')
         r2 = nil
       end
       if r2
@@ -505,7 +505,7 @@ module Methic
           r4 = true
           @index += match_len
         else
-          terminal_parse_failure('(')
+          terminal_parse_failure('\'(\'')
           r4 = nil
         end
         s3 << r4
@@ -523,7 +523,7 @@ module Methic
                   r8 = true
                   @index += match_len
                 else
-                  terminal_parse_failure(')')
+                  terminal_parse_failure('\')\'')
                   r8 = nil
                 end
                 s3 << r8
@@ -555,6 +555,9 @@ module Methic
   end
 
   module Variable0
+  end
+
+  module Variable1
     def eval(env={})
       env[name]
     end
@@ -575,27 +578,74 @@ module Methic
       return cached
     end
 
-    s0, i0 = [], index
+    i0, s0 = index, []
+    s1, i1 = [], index
     loop do
-      if has_terminal?(@regexps[gr = '\A[a-z]'] ||= Regexp.new(gr), :regexp, index)
-        r1 = true
+      if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
+        r2 = true
         @index += 1
       else
-        terminal_parse_failure('[a-z]')
-        r1 = nil
+        terminal_parse_failure('[A-Za-z]')
+        r2 = nil
       end
-      if r1
-        s0 << r1
+      if r2
+        s1 << r2
       else
         break
       end
     end
-    if s0.empty?
-      @index = i0
-      r0 = nil
+    if s1.empty?
+      @index = i1
+      r1 = nil
     else
+      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+    end
+    s0 << r1
+    if r1
+      s3, i3 = [], index
+      loop do
+        if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
+          r4 = true
+          @index += 1
+        else
+          terminal_parse_failure('[0-9]')
+          r4 = nil
+        end
+        if r4
+          s3 << r4
+        else
+          break
+        end
+      end
+      r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+      s0 << r3
+      if r3
+        s5, i5 = [], index
+        loop do
+          if has_terminal?(@regexps[gr = '\A[A-Za-z]'] ||= Regexp.new(gr), :regexp, index)
+            r6 = true
+            @index += 1
+          else
+            terminal_parse_failure('[A-Za-z]')
+            r6 = nil
+          end
+          if r6
+            s5 << r6
+          else
+            break
+          end
+        end
+        r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+        s0 << r5
+      end
+    end
+    if s0.last
       r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
       r0.extend(Variable0)
+      r0.extend(Variable1)
+    else
+      @index = i0
+      r0 = nil
     end
 
     node_cache[:variable][start_index] = r0
@@ -668,7 +718,7 @@ module Methic
         r5 = true
         @index += match_len
       else
-        terminal_parse_failure('0')
+        terminal_parse_failure('\'0\'')
         r5 = nil
       end
       if r5
@@ -703,7 +753,7 @@ module Methic
         r1 = true
         @index += match_len
       else
-        terminal_parse_failure(' ')
+        terminal_parse_failure('\' \'')
         r1 = nil
       end
       if r1
